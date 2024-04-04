@@ -12,7 +12,6 @@ import FirebaseAuth
 struct StockJournals: View {
     //@State
     //var test: User = User()
-    @Binding var UserID: String
     @State
     var Stocks: [Stock] = [Stock]()
     var body: some View {
@@ -39,7 +38,7 @@ struct StockJournals: View {
             .onAppear{
                 fetchData{ temp in
                     //test = temp
-                    //Stocks = test.stockNotes
+                    Stocks = temp
                 }
             }
         }
@@ -48,7 +47,7 @@ struct StockJournals: View {
         .onAppear{
             fetchData{ temp in
                 //test = temp
-                //Stocks = test.stockNotes
+                Stocks = temp
             }
         }
     }
@@ -96,21 +95,23 @@ struct StockJournals: View {
 //        completion(stocks)
 //    })
 //}
-func fetchData(completion: @escaping (User) -> Void){
+func fetchData(completion: @escaping ([Stock]) -> Void){
     var ref = Database.database().reference()
     var user = Auth.auth().currentUser?.uid ?? ""
-    var stocks:[User] = []
-    ref.child("jpnpf4FoFEZW6W2hktXh4fBWGz93").child("stockNotes").observe(.childAdded, with: { snapshot in
+    var stocks:[Stock] = []
+    ref.child(user).child("stockNotes").observe(.childAdded, with: { snapshot in
         guard let stockData = snapshot.value as? [String: Any],
-              let gains = stockData["dailyNotes"] as? [DailyNotes],
-              let notes = stockData["StockNotes"] as? [Stock] else {
+              let gains = stockData["gains"] as? Double,
+              let notes = stockData["notes"] as? String,
+              let ticker = stockData["ticker"] as? String
+        else {
             print("Failed to parse item data for key: \(snapshot.key)")
             return
         }
         print("HELLLOO")
-                  let new = User(UID: "BADDDDBG", dailyNotes: gains, stockNotes: notes)
+                  let new = Stock(gains: gains, notes: notes, ticker: ticker)
         stocks.append(new)
-        completion(new)
+        completion(stocks)
     })
 }
 

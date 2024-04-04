@@ -17,7 +17,7 @@ struct Login: View {
     @State private var password = ""
     @State private var userIsLoggedIn = false
     
-    @Binding var UserID: String
+    
     @Binding var loginIsShowing: Bool
     var body: some View {
         VStack{
@@ -37,9 +37,15 @@ struct Login: View {
                         .font(.title)
                         .background(Color.white)
                     TextField("USERNAME", text: $email)
-                        .padding(.leading,UIScreen.main.bounds.width/2.5)
+                        .multilineTextAlignment(.center)
+
+                        .frame(maxWidth: .infinity) // Expand the width to fill the available space
+                        .padding(.horizontal)
                     SecureField("PASSWORD", text: $password)
-                        .padding(.leading,UIScreen.main.bounds.width/2.5)
+                        .multilineTextAlignment(.center)
+
+                        .frame(maxWidth: .infinity) // Expand the width to fill the available space
+                        .padding(.horizontal)
                 }
             }
                     Spacer()
@@ -89,23 +95,23 @@ struct Login: View {
                 print(error!.localizedDescription)
             }
         }
-        storeUser()
+        //storeUser()
     }
     
-    func storeUser(){
-        var test = [DailyNotes(days: String("12/9/2024"), notes: String("My first day of journaling"))]
-        var test2 = [Stock(gains: 100.22, notes: String("I tried very hard"), ticker: "Tesla")]
-        var ref = Database.database().reference()
-        UserID = Auth.auth().currentUser?.uid ?? ""
-        var user = User(UID: UserID, dailyNotes: test, stockNotes: test2)
-        ref.child(user.UID).setValue(user.toDictionary)
-        ref.parent?.key
-    }
+//    func storeUser(){
+//        var test = [DailyNotes(days: String("12/9/2024"), notes: String("My first day of journaling"))]
+//        var test2 = [Stock(gains: 100.22, notes: String("I tried very hard"), ticker: "Tesla")]
+//        var ref = Database.database().reference()
+//        var UserID = Auth.auth().currentUser?.uid ?? ""
+//        var user = User(UID: UserID, dailyNotes: test, stockNotes: test2)
+//        ref.child(user.UID).setValue(user.toDictionary)
+//        ref.parent?.key
+//    }
     
         }
     
 
 
-//#Preview {
-//    Login(loginIsShowing: true)
-//}
+#Preview {
+    Login(loginIsShowing: .constant(true))
+}

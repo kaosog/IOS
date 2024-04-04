@@ -1,7 +1,6 @@
 import SwiftUI
 
 struct CalendarView: View {
-    @Binding var UserID: String
     @State private var color: Color = .blue
     @State private var date = Date.now
     @State var RedDays = [Date().startOfDay]
@@ -12,9 +11,12 @@ struct CalendarView: View {
     var body: some View {
         NavigationView{
             VStack {
-                LabeledContent("Calendar Color") {
-                    ColorPicker("", selection: $color, supportsOpacity: false)
-                }
+                Text("Stock Calendar")
+                    .font(.title)
+                    .bold()
+                //LabeledContent("Calendar Color") {
+                    //ColorPicker("", selection: $color, supportsOpacity: false)
+                //}
                 LabeledContent("Date/Time") {
                     DatePicker("", selection: $date, displayedComponents: [.date])
                 }
