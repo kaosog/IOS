@@ -9,7 +9,7 @@ import SwiftUI
 
 struct IndividualStockNote: View {
     var stock: Stock
-    var Note: NotesDaily
+    var Note: String
     
     var body: some View {
         VStack{
@@ -17,7 +17,7 @@ struct IndividualStockNote: View {
                 .padding()
             Spacer()
             ZStack{
-                Text(Note.notes)
+                Text(Note)
             }
             .frame(width: UIScreen.main.bounds.width,height: UIScreen.main.bounds.height-150)
             .background(Color("NotePad"))
@@ -26,5 +26,5 @@ struct IndividualStockNote: View {
 }
 
 #Preview {
-    IndividualStockNote(stock: Stock(gains: 100, notes: [NotesDaily(note: "Tried"),NotesDaily(note: "Failure")], ticker: "Facebook"),Note: NotesDaily(note: "Failure"))
+    IndividualStockNote(stock: Stock(gains: 100, notes: String("Failure"), ticker: "Facebook"),Note: String("Failure"))
 }

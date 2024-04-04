@@ -7,21 +7,17 @@
 
 import SwiftUI
 import Charts
+import FirebaseAuth
+import FirebaseDatabase
 
-class Accounts{
-    @State var username: String = ""
-    @State var password: String = ""
 
-    func log(){
-        
-    }
-    func sign(){
-        
-    }
-}
 
 struct Login: View {
-    @State var information = Accounts()
+    @State private var email = ""
+    @State private var password = ""
+    @State private var userIsLoggedIn = false
+    
+    @Binding var UserID: String
     @Binding var loginIsShowing: Bool
     var body: some View {
         VStack{
@@ -40,16 +36,16 @@ struct Login: View {
                     Text("Stock Assistant")
                         .font(.title)
                         .background(Color.white)
-                    TextField("USERNAME", text: information.$username)
+                    TextField("USERNAME", text: $email)
                         .padding(.leading,UIScreen.main.bounds.width/2.5)
-                    SecureField("PASSWORD", text: information.$password)
+                    SecureField("PASSWORD", text: $password)
                         .padding(.leading,UIScreen.main.bounds.width/2.5)
                 }
             }
                     Spacer()
                     HStack{
                         Button("Log In"){
-                            information.log()
+                            login()
                             loginIsShowing = false;
                         }
                         .frame(width:125,height:50)
@@ -57,7 +53,7 @@ struct Login: View {
                         .cornerRadius(100)
                         
                         Button("Sign Up"){
-                            information.sign()
+                            register()
                         }
                         .frame(width:125,height:50)
                         .background(Color.white)
@@ -66,7 +62,46 @@ struct Login: View {
                     Spacer()
                 }
                 .background(Color.cyan)
+                .onAppear{
+                    Auth.auth().addStateDidChangeListener { auth, user in
+                        if user != nil{
+                            
+                            //loginIsShowing.toggle()
+                        }
+                    }
+                }
             }
+    func checkLoggedIn(){
+        if userIsLoggedIn{
+            loginIsShowing = false
+        }
+    }
+    func login(){
+        Auth.auth().signIn(withEmail: email, password: password) { result, error in
+            if error != nil{
+                print(error!.localizedDescription)
+            }
+        }
+    }
+    func register(){
+        Auth.auth().createUser(withEmail: email, password: password) { result, error in
+            if error != nil{
+                print(error!.localizedDescription)
+            }
+        }
+        storeUser()
+    }
+    
+    func storeUser(){
+        var test = [DailyNotes(days: String("12/9/2024"), notes: String("My first day of journaling"))]
+        var test2 = [Stock(gains: 100.22, notes: String("I tried very hard"), ticker: "Tesla")]
+        var ref = Database.database().reference()
+        UserID = Auth.auth().currentUser?.uid ?? ""
+        var user = User(UID: UserID, dailyNotes: test, stockNotes: test2)
+        ref.child(user.UID).setValue(user.toDictionary)
+        ref.parent?.key
+    }
+    
         }
     
 

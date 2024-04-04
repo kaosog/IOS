@@ -9,10 +9,10 @@ import SwiftUI
 
 struct IndividualStockCell: View {
     var stock: Stock
-    var String: NotesDaily
+    var String: String
     var body: some View {
         HStack{
-            Text("\(String.notes)")
+            Text("\(String)")
                 .padding()
             Spacer()
             Text("12/9/23")
@@ -22,5 +22,5 @@ struct IndividualStockCell: View {
 }
 
 #Preview {
-    IndividualStockCell(stock: Stock(gains: 100, notes: [NotesDaily(note: "Tried"),NotesDaily(note: "Failure")], ticker: "Facebook"),String: NotesDaily(note: "Failure"))
+    IndividualStockCell(stock: Stock(gains: 100, notes: String( "Tried"), ticker: "Facebook"),String: String("Failure"))
 }

@@ -35,5 +35,5 @@ struct StockCell: View {
 }
 
 #Preview {
-    StockCell(stock: Stock(gains: 100, notes: [NotesDaily(note: "Tried"),NotesDaily(note: "Failure")], ticker: "Facebook"))
+    StockCell(stock: Stock(gains: 100, notes: String("Tried"), ticker: "Facebook"))
 }
